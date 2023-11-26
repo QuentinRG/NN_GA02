@@ -12,13 +12,13 @@ import pandas as pd
 import time
 from utils import play_game, play_game2
 from game_environment import Snake, SnakeNumpy
-import tensorflow as tf
+import torch
 from agent import DeepQLearningAgent, PolicyGradientAgent,\
                 AdvantageActorCriticAgent, mean_huber_loss
 import json
 
 # some global variables
-tf.random.set_seed(42)
+torch.manual_seed(42)
 version = 'v17.1'
 
 # get training configurations
@@ -33,7 +33,7 @@ with open('model_config/{:s}.json'.format(version), 'r') as f:
     buffer_size = m['buffer_size']
 
 # define no of episodes, logging frequency
-episodes = 2 * (10**5)
+episodes = 500000
 log_frequency = 500
 games_eval = 8
 
@@ -58,7 +58,7 @@ print('Agent is {:s}'.format(agent_type))
 # setup the epsilon range and decay rate for epsilon
 # define rewrad type and update frequency, see utils for more details
 if(agent_type in ['DeepQLearningAgent']):
-    epsilon, epsilon_end = 1, 0.01
+    epsilon, epsilon_end = 0.995, 0.01
     reward_type = 'current'
     sample_actions = False
     n_games_training = 8*16
@@ -128,6 +128,7 @@ for index in tqdm(range(episodes)):
                        stateful=True)
         loss = agent.train_agent(batch_size=64,
                                  num_games=n_games_training, reward_clip=True)
+        #print("LOSS: " + str(loss))
 
     if(agent_type in ['AdvantageActorCriticAgent']):
         # play a couple of games and train on all
@@ -165,3 +166,4 @@ for index in tqdm(range(episodes)):
         agent.save_model(file_path='models/{:s}'.format(version), iteration=(index+1))
         # keep some epsilon alive for training
         epsilon = max(epsilon * decay, epsilon_end)
+

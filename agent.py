@@ -302,12 +302,15 @@ class DeepQLearningAgent(Agent):
                  version=version)
         self.reset_models()
 
-    def reset_models(self): # No change needed
+    def reset_models(self): # Changes needed to be made for PyTorch
         """ Reset all the models by creating new graphs"""
         self._model = self._agent_model()
+        self._criterion = nn.HuberLoss(reduction="mean")
+        self._optimizer = torch.optim.RMSprop(self._model.parameters(), lr=0.0005)
         if(self._use_target_net):
             self._target_net = self._agent_model()
             self.update_target_net()
+        self.print_models()
 
     def _prepare_input(self, board): # No change needed
         """Reshape input and normalize
@@ -394,7 +397,7 @@ class DeepQLearningAgent(Agent):
         model_outputs = self._get_model_outputs(board, self._model)
         return np.argmax(np.where(legal_moves==1, model_outputs, -np.inf), axis=1) # To be checked if -np.inf is correct
 
-    def _agent_model(self): # ???
+    def _agent_model(self): # Changes needed to be made for PyTorch
         """Returns the model which evaluates Q values for a given state input
 
         Returns
@@ -402,12 +405,9 @@ class DeepQLearningAgent(Agent):
         model : TensorFlow Graph
             DQN model graph
         """
-        # define the input layer, shape is dependent on the board size and frames
-        with open('model_config/{:s}.json'.format(self._version), 'r') as f:
-            m = json.loads(f.read())
-        
-        # Create the model, check if the removed code is needed
-        model = DQN(version= self._version, in_channels= 2, n_actions= self._n_actions, x_size= self._board_size, y_size= self._board_size)
+        # define the input layer, shape is dependent on the board size and frames        
+        # Create the model
+        model = DQN()
                 
         """
         input_board = Input((self._board_size, self._board_size, self._n_frames,), name='input')

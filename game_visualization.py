@@ -7,6 +7,8 @@ from agent import DeepQLearningAgent, PolicyGradientAgent, \
 from game_environment import Snake, SnakeNumpy
 from utils import visualize_game
 import json
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='TRUE'
 # import keras.backend as K
 
 # some global variables
@@ -21,7 +23,7 @@ with open('model_config/{:s}.json'.format(version), 'r') as f:
     n_actions = m['n_actions']
     obstacles = bool(m['obstacles'])
 
-iteration_list = [163500]
+iteration_list = [500000]
 max_time_limit = 398
 
 # setup the environment
