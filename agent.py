@@ -378,7 +378,7 @@ class DeepQLearningAgent(Agent):
         # return((board/128.0 - 1).copy())
         return board.astype(np.float32)/4.0
 
-    def move(self, board, legal_moves, value=None): # ???
+    def move(self, board, legal_moves, value=None): # Changes needed to be made for PyTorch
         """Get the action with maximum Q value
         
         Parameters
@@ -395,7 +395,7 @@ class DeepQLearningAgent(Agent):
         """
         # use the agent model to make the predictions
         model_outputs = self._get_model_outputs(board, self._model)
-        return np.argmax(np.where(legal_moves==1, model_outputs, -np.inf), axis=1) # To be checked if -np.inf is correct
+        return np.argmax(np.where(legal_moves==1, model_outputs, -np.inf), axis=1)
 
     def _agent_model(self): # Changes needed to be made for PyTorch
         """Returns the model which evaluates Q values for a given state input
@@ -438,7 +438,7 @@ class DeepQLearningAgent(Agent):
                             loss = self._model.loss)
 
 
-    def get_action_proba(self, board, values=None):
+    def get_action_proba(self, board, values=None): # No change needed
         """Returns the action probability values using the DQN model
 
         Parameters
@@ -522,7 +522,7 @@ class DeepQLearningAgent(Agent):
             print('Target Network')
             summary(self._target_net,input_size)
 
-    def train_agent(self, batch_size=32, num_games=1, reward_clip=False):
+    def train_agent(self, batch_size=32, num_games=1, reward_clip=False): # Changes needed to be made for PyTorch
         """Train the model by sampling from buffer and return the error.
         We are predicting the expected future discounted reward for all
         actions with our model. The target for training the model is calculated
