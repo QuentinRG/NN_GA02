@@ -7,13 +7,11 @@ import time
 import pickle
 from collections import deque
 import json
-import tensorflow as tf
-from tensorflow.keras.regularizers import l2
-from tensorflow.keras.optimizers import RMSprop, SGD, Adam
-import tensorflow.keras.backend as K
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Softmax, MaxPool2D
-from tensorflow.keras import Model
-from tensorflow.keras.regularizers import l2
+#Change TensorFlow to PyTorch imports
+import torch
+import torch.nn as nn
+from torchsummary import summary
+
 # from tensorflow.keras.losses import Huber
 
 def huber_loss(y_true, y_pred, delta=1):
@@ -599,7 +597,7 @@ class PolicyGradientAgent(DeepQLearningAgent):
                                 buffer_size=buffer_size, gamma=gamma,
                                 n_actions=n_actions, use_target_net=False,
                                 version=version)
-        self._actor_optimizer = tf.keras.optimizer.Adam(1e-6)
+        #self._actor_optimizer = tf.keras.optimizer.Adam(1e-6)
 
     def _agent_model(self):
         """Returns the model which evaluates prob values for a given state input
@@ -611,7 +609,7 @@ class PolicyGradientAgent(DeepQLearningAgent):
         model : TensorFlow Graph
             Policy Gradient model graph
         """
-        input_board = Input((self._board_size, self._board_size, self._n_frames,))
+        '''input_board = Input((self._board_size, self._board_size, self._n_frames,))
         x = Conv2D(16, (4,4), activation = 'relu', data_format='channels_last', kernel_regularizer=l2(0.01))(input_board)
         x = Conv2D(32, (4,4), activation = 'relu', data_format='channels_last', kernel_regularizer=l2(0.01))(x)
         x = Flatten()(x)
@@ -622,7 +620,7 @@ class PolicyGradientAgent(DeepQLearningAgent):
         # do not compile the model here, but rather use the outputs separately
         # in a training function to create any custom loss function
         # model.compile(optimizer = RMSprop(0.0005), loss = 'mean_squared_error')
-        return model
+        return model'''
 
     def train_agent(self, batch_size=32, beta=0.1, normalize_rewards=False,
                     num_games=1, reward_clip=False):
@@ -658,9 +656,9 @@ class PolicyGradientAgent(DeepQLearningAgent):
         if(normalize_rewards):
             r = (r - np.mean(r))/(np.std(r) + 1e-8)
         target = np.multiply(a, r)
-        loss = actor_loss_update(self._prepare_input(s), target, self._model,
-                  self._actor_optimizer, beta=beta, num_games=num_games)
-        return loss[0] if len(loss)==1 else loss
+        #loss = actor_loss_update(self._prepare_input(s), target, self._model,
+        #          self._actor_optimizer, beta=beta, num_games=num_games)
+        #return loss[0] if len(loss)==1 else loss
 
 class AdvantageActorCriticAgent(PolicyGradientAgent):
     """This agent uses the Advantage Actor Critic method to train
@@ -680,7 +678,7 @@ class AdvantageActorCriticAgent(PolicyGradientAgent):
                                 buffer_size=buffer_size, gamma=gamma,
                                 n_actions=n_actions, use_target_net=use_target_net,
                                 version=version)
-        self._optimizer = tf.keras.optimizers.RMSprop(5e-4)
+        #self._optimizer = tf.keras.optimizers.RMSprop(5e-4)
 
     def _agent_model(self):
         """Returns the models which evaluate prob logits and action values 
@@ -694,7 +692,7 @@ class AdvantageActorCriticAgent(PolicyGradientAgent):
         model_full : TensorFlow Graph
             A2C model complete graph
         """
-        input_board = Input((self._board_size, self._board_size, self._n_frames,))
+        '''input_board = Input((self._board_size, self._board_size, self._n_frames,))
         x = Conv2D(16, (3,3), activation='relu', data_format='channels_last')(input_board)
         x = Conv2D(32, (3,3), activation='relu', data_format='channels_last')(x)
         x = Flatten()(x)
@@ -707,7 +705,7 @@ class AdvantageActorCriticAgent(PolicyGradientAgent):
         model_values = Model(inputs=input_board, outputs=state_values)
         # updates are calculated in the train_agent function
 
-        return model_logits, model_full, model_values
+        return model_logits, model_full, model_values'''
 
     def reset_models(self):
         """ Reset all the models by creating new graphs"""
@@ -835,7 +833,7 @@ class AdvantageActorCriticAgent(PolicyGradientAgent):
         critic_target = r + future_reward
 
         model = self._full_model
-        with tf.GradientTape() as tape:
+        '''with tf.GradientTape() as tape:
             model_out = model(s_prepared)
             policy = tf.nn.softmax(model_out[0])
             log_policy = tf.nn.log_softmax(model_out[0])
@@ -852,7 +850,7 @@ class AdvantageActorCriticAgent(PolicyGradientAgent):
         self._optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
         loss = [loss.numpy(), actor_loss.numpy(), critic_loss.numpy()]
-        return loss[0] if len(loss)==1 else loss
+        return loss[0] if len(loss)==1 else loss'''
 
 class HamiltonianCycleAgent(Agent):
     """This agent prepares a Hamiltonian Cycle through the board and then
@@ -1056,9 +1054,9 @@ class SupervisedLearningAgent(DeepQLearningAgent):
                  version=version)
         # define model with softmax activation, and use action as target
         # instead of the reward value
-        self._model_action_out = Softmax()(self._model.get_layer('action_values').output)
-        self._model_action = Model(inputs=self._model.get_layer('input').input, outputs=self._model_action_out)
-        self._model_action.compile(optimizer=Adam(0.0005), loss='categorical_crossentropy')
+        #self._model_action_out = Softmax()(self._model.get_layer('action_values').output)
+        #self._model_action = Model(inputs=self._model.get_layer('input').input, outputs=self._model_action_out)
+        #self._model_action.compile(optimizer=Adam(0.0005), loss='categorical_crossentropy')
         
     def train_agent(self, batch_size=32, num_games=1, epochs=5, 
                     reward_clip=False):
