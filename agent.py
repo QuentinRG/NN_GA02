@@ -58,6 +58,27 @@ def mean_huber_loss(y_true, y_pred, delta=1):
     """
     return torch.mean(huber_loss(y_true, y_pred, delta))
 
+class DQN(nn.Module):
+    def __init__(self):
+        super(DQN, self).__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_channels=2, out_channels=16, kernel_size=3, stride=1, padding=0),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=0),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, stride=1, padding=0),
+            nn.ReLU(),
+            nn.Flatten(),
+            nn.Linear(256 , 64),
+            nn.ReLU())
+        self.out = nn.Linear(64, 4)
+
+    def forward(self, x):
+        x = self.conv(x)
+        output = self.out(x)
+
+        return output
+
 class Agent():
     """Base class for all agents
     This class extends to the following classes
