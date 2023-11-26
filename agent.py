@@ -34,11 +34,10 @@ def huber_loss(y_true, y_pred, delta=1):
     loss : Tensor
         loss values for all points
     """
-    error = (y_true - y_pred)
-    quad_error = 0.5*tf.math.square(error)
-    lin_error = delta*(tf.math.abs(error) - 0.5*delta)
-    # quadratic error, linear error
-    return tf.where(tf.math.abs(error) < delta, quad_error, lin_error)
+    err = (y_true - y_pred)
+    lin_err = delta * (torch.abs(err) - 0.5 * delta)
+    quad_err = 0.5 * torch.square(err)
+    return torch.where(torch.abs(err) < delta, quad_err, lin_err)
 
 def mean_huber_loss(y_true, y_pred, delta=1):
     """Calculates the mean value of huber loss
@@ -57,7 +56,7 @@ def mean_huber_loss(y_true, y_pred, delta=1):
     loss : Tensor
         average loss across points
     """
-    return tf.reduce_mean(huber_loss(y_true, y_pred, delta))
+    return torch.mean(huber_loss(y_true, y_pred, delta))
 
 class Agent():
     """Base class for all agents
