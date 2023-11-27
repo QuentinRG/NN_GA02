@@ -14,7 +14,7 @@ from torchsummary import summary
 
 # from tensorflow.keras.losses import Huber
 
-def huber_loss(y_true, y_pred, delta=1):
+def huber_loss(y_true, y_pred, delta=1): # Changes needed to be made for PyTorch
     """Keras implementation for huber loss
     loss = {
         0.5 * (y_true - y_pred)**2 if abs(y_true - y_pred) < delta
@@ -39,7 +39,7 @@ def huber_loss(y_true, y_pred, delta=1):
     quad_err = 0.5 * torch.square(err)
     return torch.where(torch.abs(err) < delta, quad_err, lin_err)
 
-def mean_huber_loss(y_true, y_pred, delta=1):
+def mean_huber_loss(y_true, y_pred, delta=1): # Changes needed to be made for PyTorch
     """Calculates the mean value of huber loss
 
     Parameters
@@ -378,7 +378,7 @@ class DeepQLearningAgent(Agent):
         # return((board/128.0 - 1).copy())
         return board.astype(np.float32)/4.0
 
-    def move(self, board, legal_moves, value=None): # Changes needed to be made for PyTorch
+    def move(self, board, legal_moves, value=None): # No change needed
         """Get the action with maximum Q value
         
         Parameters
