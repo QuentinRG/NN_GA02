@@ -1,12 +1,12 @@
 # Snake Reinforcement Learning
 
-Code for training a Deep Reinforcement Learning agent to play the game of Snake.
+Code for training a Deep Reinforcement Learning agent to play the game of Snake in Pytorch.
 The agent takes 2 frames of the game as input (image) and predicts the action values for
 the next action to take.
 ***
-Sample games from the best performing [agent](../models/v15.1/model_188000.h5)<br>
-<img width="400" height="400" src="https://github.com/DragonWarrior15/snake-rl/blob/master/images/game_visual_v15.1_188000_1.gif" alt="model v15.1 agent" ><img width="400" height="400" src="https://github.com/DragonWarrior15/snake-rl/blob/master/images/game_visual_v15.1_188000_5.gif" alt="model v15.1 agent" >
-<img width="400" height="400" src="https://github.com/DragonWarrior15/snake-rl/blob/master/images/game_visual_v15.1_188000_6.gif" alt="model v15.1 agent" ><img width="400" height="400" src="https://github.com/DragonWarrior15/snake-rl/blob/master/images/game_visual_v15.1_188000_11.gif" alt="model v15.1 agent" >
+Sample games from the best performing [agent](../models/v17.1/model_500000.pth)<br>
+<img width="400" height="400" src="https://github.com/QuentinRG/NN_GA02/blob/master/images/game_visual_v17.1_500000_14_ob_4.mp4" alt="model v17.1 agent" ><img width="400" height="400" src="https://github.com/QuentinRG/NN_GA02/blob/master/images/game_visual_v17.1_500000_14_ob_3.mp4" alt="model v17.1 agent" >
+<img width="400" height="400" src="https://github.com/QuentinRG/NN_GA02/blob/master/images/game_visual_v17.1_500000_14_ob_2.mp4" alt="model v17.1 agent" ><img width="400" height="400" src="https://github.com/QuentinRG/NN_GA02/blob/master/images/game_visual_v17.1_500000_14_ob_1.mp4" alt="model v17.1 agent" >
 ***
 
 ## Code Structure
