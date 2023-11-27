@@ -1,4 +1,4 @@
-# Snake Reinforcement Learning in Pytorch (NN GA02)
+# Quentin Regnier - Snake Reinforcement Learning in Pytorch (NN GA02)
 
 Code for training a Deep Reinforcement Learning agent to play the game of Snake in Pytorch.
 The agent takes 2 frames of the game as input (image) and predicts the action values for
